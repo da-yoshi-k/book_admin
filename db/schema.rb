@@ -10,12 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_210_330_134_249) do
-  create_table 'books', force: :cascade do |t|
-    t.string 'name'
-    t.date 'published_on'
-    t.integer 'price'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
+ActiveRecord::Schema.define(version: 2021_03_31_062522) do
+
+  create_table "authors", force: :cascade do |t|
+    t.string "name"
+    t.string "penname"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
+
+  create_table "book_authors", force: :cascade do |t|
+    t.integer "book_id", null: false
+    t.integer "author_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["author_id"], name: "index_book_authors_on_author_id"
+    t.index ["book_id"], name: "index_book_authors_on_book_id"
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.string "name"
+    t.date "published_on"
+    t.integer "price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "publisher_id", null: false
+    t.integer "sales_status"
+    t.index ["publisher_id"], name: "index_books_on_publisher_id"
+  end
+
+  create_table "publishers", force: :cascade do |t|
+    t.string "name"
+    t.text "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "book_authors", "authors"
+  add_foreign_key "book_authors", "books"
+  add_foreign_key "books", "publishers"
 end
