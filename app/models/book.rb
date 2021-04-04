@@ -4,8 +4,8 @@ class Book < ApplicationRecord
     now_on_sale: 1,  # 発売中
     end_of_print: 2 # 販売終了
   }
-  scope :costly, -> { where('price > ?', 300) }
-  scope :written_about, ->(them) { where('name like ?', "%#{them}%") }
+  scope :costly, -> { where("price > ?", 300) }
+  scope :written_about, ->(them) { where("name like ?", "%#{them}%") }
 
   belongs_to :publisher
   has_many :book_authors
@@ -15,7 +15,7 @@ class Book < ApplicationRecord
   validates :name, length: { maximum: 25 }
   validates :price, numericality: { greater_than_or_equal_to: 0 }
   validate do |book|
-    book.errors[:name] << "I don't like exercise." if book.name.include?('exercise')
+    book.errors[:name] << "I don't like exercise." if book.name.include?("exercise")
   end
 
   after_destroy do
@@ -24,7 +24,7 @@ class Book < ApplicationRecord
 
   after_destroy if: :high_price? do
     Rails.logger.warn "Book with high price is deleted: #{attributes}"
-    Rails.logger.warn 'Please check!!'
+    Rails.logger.warn "Please check!!"
   end
 
   def high_price?
